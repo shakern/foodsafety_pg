@@ -1,17 +1,17 @@
 function loadData() {
-    // confirm code is running on click
-    console.log('fetch');
     fetch('/api')
-        .then(res => res.json())
-        .then(res => {
-            // logging step to check what we got
-            console.log(res);
-            olstr = "<ol>";
-            for (i = 0; i < res.data.length; i++) {
-                olstr += "<li>" + res.data[i] + "</li>"
-            }
-            olstr += "</ol>"
-            return olstr;
-        })
-        .then(codes => document.querySelector(".content").innerHTML = codes);
-}
+      .then(res => res.json())
+      .then(res => {
+        //console.log(res);
+        var pos = res.data.map(el => el.geocoded_column_1);
+        //remove null coordinate values; there are a lot
+        pos = pos.filter(el => el != null);
+        console.log(pos);
+        for (let i = 0; i < pos.length; i +=1 ) {
+
+          console.log(pos[i].coordinates);   //log each coordinate as marker is added, will remove
+          L.marker(pos[i].coordinates).addTo(map);
+        }
+      });
+      //.then(codes => document.querySelector(".content").innerHTML = codes);
+  }
